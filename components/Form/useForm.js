@@ -38,34 +38,30 @@ const useForm = () => {
     })
   }
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault()
-    firebase
-      .firestore()
-      .collection('users')
+    const db = firebase.firestore().collection('users')
+    const snapshot = await db
+      .where('email', '==', values.email)
+      .where('pass', '==', md5(values.password))
       .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          if (
-            values.email === doc.data().email &&
-            md5(values.password) === doc.data().pass
-          ) {
-            localStorage.setItem('data', doc.id)
-            localStorage.setItem('isLogin', true)
-            setIsLogin(true)
-          } else {
-            console.log('not exsist')
-          }
-        })
-      })
+    if (snapshot.empty) {
+      alert('Error!!! Email or password not correct')
+      return
+    }
+    snapshot.forEach((doc) => {
+      localStorage.setItem('data', doc.id)
+      localStorage.setItem('isLogin', true)
+      setIsLogin(true)
+    })
   }
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault()
-    firebase
-      .firestore()
-      .collection('users')
-      .add({
+    const db = firebase.firestore().collection('users')
+    const snapshot = await db.where('email', '==', values.email).get()
+    if (snapshot.empty) {
+      db.add({
         name: values.username,
         email: values.email,
         pass: md5(values.password),
@@ -73,9 +69,10 @@ const useForm = () => {
         createAt: new Date(),
         updateAt: new Date(),
       })
-      .then(() => {
-        alert('add success')
-      })
+      alert('Add success')
+    } else {
+      alert('Error!!! Email exsisted')
+    }
   }
 
   const handleLogOut = () => {
