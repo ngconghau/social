@@ -8,8 +8,6 @@ const useForm = () => {
     password: '',
     dateofbirth: '',
     hasAccount: false,
-    createAt: '',
-    updateAt: '',
   })
 
   const [isLogin, setIsLogin] = useState()
@@ -25,8 +23,6 @@ const useForm = () => {
       password: '',
       hasAccount: !values.hasAccount,
       dateofbirth: '',
-      createAt: '',
-      updateAt: '',
     })
   }
 
@@ -66,8 +62,7 @@ const useForm = () => {
         email: values.email,
         pass: md5(values.password),
         dob: values.dateofbirth,
-        createAt: new Date(),
-        updateAt: new Date(),
+        datedAt: new Date(),
       })
       alert('Add success')
     } else {

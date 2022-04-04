@@ -3,11 +3,9 @@ import firebase from '../../pages/firebase'
 
 const Post = () => {
   const [posts, setPosts] = useState([])
-  const [userPost , setUserPost] = useState({
-    title : '',
-    content : '',
-    createdAt : '',
-    updatedAt: ''
+  const [userPost, setUserPost] = useState({
+    title: '',
+    content: '',
   })
 
   useEffect(() => {
@@ -52,7 +50,7 @@ const Post = () => {
         })
         return Promise.resolve([resultUser, userPosts])
       })
-      
+
       getUserByUserPostId.then(([resultUser, userPosts]) => {
         let userPostList = []
         userPosts.map((post) => {
@@ -70,11 +68,40 @@ const Post = () => {
       })
     })
   }, [])
+
+  const handleCreatePost = (e) => {
+    e.preventDefault()
+    const db = firebase.firestore()
+    db.collection('posts')
+      .doc(localStorage.getItem('data'))
+      .collection('userPosts')
+      .add({
+        title: userPost.title,
+        content: userPost.content,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+  }
   return (
     <div className="container">
-      <form >
+      <form onSubmit={handleCreatePost}>
         <label>Title</label>
-        <input type="tex" required  />
+        <input
+          type="text"
+          required
+          value={userPost.title}
+          onChange={(e) => setUserPost({ ...userPost, title: e.target.value })}
+        />
+        <label>Content</label>
+        <textarea
+          type="text"
+          required
+          value={userPost.content}
+          onChange={(e) =>
+            setUserPost({ ...userPost, content: e.target.value })
+          }
+        />
+        <button type="submit">create</button>
       </form>
       <ul>
         {posts.map((post) => (
