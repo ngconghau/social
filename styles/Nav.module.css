@@ -1,0 +1,20 @@
+
+
+.container nav {
+  background: #74b4ec;
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container nav h2 {
+  color: #fff;
+}
+
+.container nav button {
+  width: 86px;
+  padding: 8px 0;
+  background: #3a2b58;
+}
