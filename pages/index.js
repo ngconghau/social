@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
-import Dashboard from '../components/Dashboard/Dashboard'
-import useForm from '../components/Form/useForm'
-import Login from '../components/Form/Login'
+import Dashboard from './dashboard'
+import useForm from './api/useLogin'
+import Login from './login'
 
 export default function Home() {
   const {

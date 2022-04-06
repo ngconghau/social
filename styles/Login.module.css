@@ -47,7 +47,9 @@
   width: 100%;
   padding: 24px 0;
 }
-
+.login .loginContainer .btnContainer button{
+  width: 100%;
+}
 .login .loginContainer .btnContainer p {
   margin: 14px 0 0 0;
   text-align: right;
