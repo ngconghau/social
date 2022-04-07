@@ -3,29 +3,38 @@ import firebase from '../firebase'
 
 const Post = () => {
   const [posts, setPosts] = useState([])
-  const [userPost, setUserPost] = useState({
+  const [userPosts, setUserPosts] = useState([])
+  const [createPosts, setCreatePosts] = useState({
     title: '',
     content: '',
   })
 
+  // run after component render
   useEffect(() => {
     const db = firebase.firestore()
     const getAllUserPosts = db
       .collectionGroup('userPosts')
       .orderBy('createdAt', 'desc')
-      .get()
-      .then((querySnapshot) => {
+      .onSnapshot((snapshot) => {
         let userPosts = []
-        querySnapshot.forEach((doc) => {
+        snapshot.forEach((doc) => {
           userPosts.push({
             uid: doc.ref.parent.parent.id,
             upid: doc.id,
             data: { title: doc.data().title, content: doc.data().content },
           })
         })
-        return Promise.resolve(userPosts)
+        setUserPosts(userPosts)
       })
+    return () => getAllUserPosts
+  }, [])
 
+  // run when userPosts change
+  useEffect(() => {
+    if (!userPosts.length) {
+      return
+    }
+    const db = firebase.firestore()
     const getAllUsers = db
       .collection('users')
       .get()
@@ -40,48 +49,43 @@ const Post = () => {
         return Promise.resolve(users)
       })
 
-    getAllUserPosts.then((userPosts) => {
+    getAllUsers.then((users) => {
       let uids = userPosts.map((usePost) => {
         return usePost.uid
       })
-      const getUserByUserPostId = getAllUsers.then((users) => {
-        let resultUser = users.filter((user) => {
-          return uids.includes(user.id)
-        })
-        return Promise.resolve([resultUser, userPosts])
+      let resultUser = users.filter((user) => {
+        return uids.includes(user.id)
       })
-
-      getUserByUserPostId.then(([resultUser, userPosts]) => {
-        let userPostList = []
-        userPosts.map((post) => {
-          const user = resultUser.find((u) => {
-            return u.id === post.uid
-          })
-          userPostList.push({
-            id: post.upid,
-            authour: user.name,
-            title: post.data.title,
-            content: post.data.content,
-          })
+      let userPostList = []
+      userPosts.map((post) => {
+        const users = resultUser.find((u) => {
+          return u.id === post.uid
         })
-        setPosts(userPostList)
+        userPostList.push({
+          id: post.upid,
+          authour: users.name,
+          title: post.data.title,
+          content: post.data.content,
+        })
       })
+      setPosts(userPostList)
     })
-  }, [])
 
-  const handleCreatePost = async (e) => {
+    return getAllUsers
+  }, [userPosts])
+
+  const handleCreatePost = (e) => {
     e.preventDefault()
     const db = firebase.firestore()
     db.collection('posts')
       .doc(localStorage.getItem('data'))
       .collection('userPosts')
       .add({
-        title: userPost.title,
-        content: userPost.content,
+        title: createPosts.title,
+        content: createPosts.content,
         createdAt: new Date(),
         updatedAt: new Date(),
       })
-    alert('create success')
   }
   return (
     <>
@@ -90,16 +94,18 @@ const Post = () => {
         <input
           type="text"
           required
-          value={userPost.title}
-          onChange={(e) => setUserPost({ ...userPost, title: e.target.value })}
+          value={createPosts.title}
+          onChange={(e) =>
+            setCreatePosts({ ...createPosts, title: e.target.value })
+          }
         />
         <label>Content</label>
         <textarea
           type="text"
           required
-          value={userPost.content}
+          value={createPosts.content}
           onChange={(e) =>
-            setUserPost({ ...userPost, content: e.target.value })
+            setCreatePosts({ ...createPosts, content: e.target.value })
           }
         />
         <button type="submit">create</button>
