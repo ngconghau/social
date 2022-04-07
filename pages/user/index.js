@@ -8,8 +8,6 @@ const UserInfo = () => {
     name: '',
     email: '',
     dateofbirth: '',
-    oldPass: '',
-    newPass: '',
   })
   useEffect(() => {
     firebase
@@ -19,7 +17,6 @@ const UserInfo = () => {
       .get()
       .then((doc) => {
         setUser({
-          ...user,
           name: doc.data().name,
           email: doc.data().email,
           dateofbirth: doc.data().dob,
@@ -27,7 +24,7 @@ const UserInfo = () => {
       })
   }, [])
 
-  const handleUpdateUser=()=>{
+  const handleUpdateUser = () => {
     firebase
       .firestore()
       .collection('users')
@@ -38,7 +35,7 @@ const UserInfo = () => {
         dob: user.dateofbirth,
         updatedAt: new Date(),
       })
-      alert('update success')
+    alert('update success')
   }
   return (
     <>
@@ -83,20 +80,9 @@ const UserInfo = () => {
               />
             </div>
           </div>
+
           <div className={styles.col}>
-            <div className={styles.form_group}>
-              <label>Old password</label>
-              <input type="password" />
-            </div>
-          </div>
-          <div className={styles.col}>
-            <div className={styles.form_group}>
-              <label>New password</label>
-              <input type="password" />
-            </div>
-          </div>
-          <div className={styles.col}>
-            <input type="submit" value="Submit" onClick={handleUpdateUser}/>
+            <input type="submit" value="Submit" onClick={handleUpdateUser} />
           </div>
         </div>
       </div>

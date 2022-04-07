@@ -39,6 +39,7 @@ const Post = () => {
         })
         return Promise.resolve(users)
       })
+
     getAllUserPosts.then((userPosts) => {
       let uids = userPosts.map((usePost) => {
         return usePost.uid
@@ -80,6 +81,7 @@ const Post = () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       })
+    alert('create success')
   }
   return (
     <>
