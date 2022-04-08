@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import firebase from '../firebase'
+import { database, serverTimestamp } from '../firebase'
 import md5 from 'md5'
 
 const useForm = () => {
-  const database = firebase.firestore()
   const [values, setValues] = useState({
     username: '',
     email: '',
@@ -64,8 +63,8 @@ const useForm = () => {
         email: values.email,
         pass: md5(values.password),
         dob: values.dateofbirth,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       })
       alert('Add success', () => {
         setValues({ ...values, hasAccount: !values.hasAccount })

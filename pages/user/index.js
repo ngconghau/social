@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from '../../styles/UserInfo.module.css'
-import firebase from '../firebase'
+import {database} from '../firebase'
 import Nav from '../nav'
 
 const UserInfo = () => {
@@ -10,8 +10,7 @@ const UserInfo = () => {
     dateofbirth: '',
   })
   useEffect(() => {
-    firebase
-      .firestore()
+    database
       .collection('users')
       .doc(localStorage.getItem('data'))
       .get()
@@ -25,8 +24,7 @@ const UserInfo = () => {
   }, [])
 
   const handleUpdateUser = () => {
-    firebase
-      .firestore()
+    database
       .collection('users')
       .doc(localStorage.getItem('data'))
       .update({

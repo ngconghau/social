@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import firebase from '../firebase'
+import { database, serverTimestamp } from '../firebase'
+import styles from '../../styles/Post.module.css'
+import Image from 'next/image'
 
 const Post = () => {
   const [posts, setPosts] = useState([])
@@ -11,8 +13,7 @@ const Post = () => {
 
   // run after component render
   useEffect(() => {
-    const db = firebase.firestore()
-    const getAllUserPosts = db
+    const getAllUserPosts = database
       .collectionGroup('userPosts')
       .orderBy('createdAt', 'desc')
       .onSnapshot((snapshot) => {
@@ -34,8 +35,8 @@ const Post = () => {
     if (!userPosts.length) {
       return
     }
-    const db = firebase.firestore()
-    const getAllUsers = db
+
+    const getAllUsers = database
       .collection('users')
       .get()
       .then((querySnapshot) => {
@@ -76,40 +77,108 @@ const Post = () => {
 
   const handleCreatePost = (e) => {
     e.preventDefault()
-    const db = firebase.firestore()
-    db.collection('posts')
+    database
+      .collection('posts')
       .doc(localStorage.getItem('data'))
       .collection('userPosts')
       .add({
         title: createPosts.title,
         content: createPosts.content,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       })
   }
   return (
     <>
-      <form onSubmit={handleCreatePost}>
-        <label>Title</label>
-        <input
-          type="text"
-          required
-          value={createPosts.title}
-          onChange={(e) =>
-            setCreatePosts({ ...createPosts, title: e.target.value })
-          }
-        />
-        <label>Content</label>
-        <textarea
-          type="text"
-          required
-          value={createPosts.content}
-          onChange={(e) =>
-            setCreatePosts({ ...createPosts, content: e.target.value })
-          }
-        />
-        <button type="submit">create</button>
-      </form>
+      <div className={styles.write_post_container}>
+        <div className={styles.user_profile}>
+          <span>
+            <Image src="/profile-pic.png" alt="" layout="fill" />
+          </span>
+          <div>
+            <p>Hau Nguyen</p>
+          </div>
+        </div>
+        <div className={styles.post_input_container}>
+          <form onSubmit={handleCreatePost}>
+            <textarea
+              type="text"
+              placeholder="Title"
+              required
+              value={createPosts.title}
+              onChange={(e) =>
+                setCreatePosts({ ...createPosts, title: e.target.value })
+              }
+            />
+            <textarea
+              rows="5"
+              placeholder="Content"
+              required
+              value={createPosts.content}
+              onChange={(e) =>
+                setCreatePosts({ ...createPosts, content: e.target.value })
+              }
+            />
+            <div className={styles.add_post_link}>
+              <a href="#">
+                <span>
+                  <Image src="/live-video.png" alt="" layout="fill" />
+                </span>
+                Live Video
+              </a>
+              <a href="#">
+                <span>
+                  <Image src="/photo.png" alt="" layout="fill" />
+                </span>
+                Photo/Video
+              </a>
+              <a href="#">
+                <span>
+                  <Image src="/feeling.png" alt="" layout="fill" />
+                </span>
+                Feling/Activity
+              </a>
+              <button type="submit">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div className={styles.post_container}>
+        <div className={styles.user_profile}>
+          <div>
+            <p>Hau Nguyen</p>
+            <span>June 24 2022, 13:40pm</span>
+          </div>
+        </div>
+        <div className={styles.post_text}>
+          <p>Hom nay troi dep the nhi</p>
+          <p>Tu nhien cam thay yeu doi han ra</p>
+          <div className={styles.post_row}>
+            {/* <div className={styles.activity_icon}>
+              <div>
+                <span>
+                  <Image src="/like-blue.png" alt="" layout='fill' />
+                </span>
+                100
+              </div>
+              <div>
+                <span>
+                  <Image src="/comments.png" alt="" layout='fill'/>
+                </span>
+                45
+              </div>
+              <div>
+                <span>
+                  <Image src="/share.png" alt="" layout='fill'/>
+                </span>
+                33
+              </div>
+            </div> */}
+          </div>
+        </div>
+      </div>
+
       <div className="container">
         <ul>
           {posts.map((post) => (
