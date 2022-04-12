@@ -1,5 +1,9 @@
-.write_post_container {
+.container{
   width: 50%;
+  margin: 0 auto;
+}
+.write_post_container {
+  width: 100%;
   background: #fff;
   border-radius: 6px;
   padding: 10px;
@@ -83,16 +87,24 @@
   box-shadow: rgba(213, 217, 217, 0.5) 0 2px 5px 0;
   outline: 0;
 }
+
 .post_container {
   width: 100%;
-  background: #fff;
+  background: rgb(238, 238, 238);
   border-radius: 6px;
   padding: 20px;
   color: #626262;
   margin: 20px 0;
 }
-
+.user_profile {
+  display: flex;
+  align-items: center;
+}
 .user_profile span {
+  position: relative;
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
   font-size: 13px;
   color: #9a9a9a;
 }
@@ -115,7 +127,9 @@
   margin-right: 30px;
 }
 .activity_icon div span {
+  position: relative;
   width: 18px;
   height: 18px;
   margin-right: 10px;
+  cursor: pointer;
 }

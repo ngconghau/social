@@ -42,7 +42,7 @@ const useForm = () => {
       .where('email', '==', values.email)
       .where('pass', '==', md5(values.password))
       .get()
-    if (snapshot.empty) {
+      if (snapshot.empty) {
       alert('Error!!! Email or password not correct')
       return
     }
@@ -66,9 +66,8 @@ const useForm = () => {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       })
-      alert('Add success', () => {
-        setValues({ ...values, hasAccount: !values.hasAccount })
-      })
+      alert('Add success')
+      setValues({ ...values, hasAccount: !values.hasAccount })
     } else {
       alert('Error!!! Email exsisted')
     }

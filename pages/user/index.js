@@ -9,6 +9,8 @@ const UserInfo = () => {
     email: '',
     dateofbirth: '',
   })
+
+
   useEffect(() => {
     database
       .collection('users')
@@ -35,6 +37,7 @@ const UserInfo = () => {
       })
     alert('update success')
   }
+
   return (
     <>
       <Nav />
@@ -52,7 +55,6 @@ const UserInfo = () => {
               />
             </div>
           </div>
-
           <div className={styles.col}>
             <div className={styles.form_group}>
               <label>Email</label>
@@ -65,7 +67,6 @@ const UserInfo = () => {
               />
             </div>
           </div>
-
           <div className={styles.col}>
             <div className={styles.form_group}>
               <label>Date of birth</label>
@@ -78,9 +79,8 @@ const UserInfo = () => {
               />
             </div>
           </div>
-
           <div className={styles.col}>
-            <input type="submit" value="Submit" onClick={handleUpdateUser} />
+            <input type="submit" value="Update" onClick={handleUpdateUser} />
           </div>
         </div>
       </div>

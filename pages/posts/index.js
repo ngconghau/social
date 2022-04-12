@@ -6,26 +6,43 @@ import Image from 'next/image'
 const Post = () => {
   const [posts, setPosts] = useState([])
   const [userPosts, setUserPosts] = useState([])
+  const [user, setUser] = useState()
   const [createPosts, setCreatePosts] = useState({
     title: '',
     content: '',
   })
+  //get user name
+  useEffect(() => {
+    const getNameUser = database
+      .collection('users')
+      .doc(localStorage.getItem('data'))
+      .onSnapshot((doc) => {
+        setUser(doc.data().name)
+      })
+    return getNameUser
+  }, [])
 
   // run after component render
   useEffect(() => {
     const getAllUserPosts = database
       .collectionGroup('userPosts')
       .orderBy('createdAt', 'desc')
-      .onSnapshot((snapshot) => {
+      .onSnapshot((querySnapshot) => {
         let userPosts = []
-        snapshot.forEach((doc) => {
+        querySnapshot.forEach((doc) => {
           userPosts.push({
             uid: doc.ref.parent.parent.id,
             upid: doc.id,
-            data: { title: doc.data().title, content: doc.data().content },
+            data: {
+              title: doc.data().title,
+              content: doc.data().content,
+              createdAt: doc.data().createdAt,
+            },
           })
         })
-        setUserPosts(userPosts)
+        if (!querySnapshot.metadata.hasPendingWrites) {
+          setUserPosts(userPosts)
+        }
       })
     return () => getAllUserPosts
   }, [])
@@ -67,8 +84,10 @@ const Post = () => {
           authour: users.name,
           title: post.data.title,
           content: post.data.content,
+           createdAt: post.data.createdAt.toDate().toDateString()
         })
       })
+
       setPosts(userPostList)
     })
 
@@ -89,14 +108,14 @@ const Post = () => {
       })
   }
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.write_post_container}>
         <div className={styles.user_profile}>
           <span>
             <Image src="/profile-pic.png" alt="" layout="fill" />
           </span>
           <div>
-            <p>Hau Nguyen</p>
+            <p>{user}</p>
           </div>
         </div>
         <div className={styles.post_input_container}>
@@ -144,55 +163,46 @@ const Post = () => {
         </div>
       </div>
 
-      <div className={styles.post_container}>
-        <div className={styles.user_profile}>
-          <div>
-            <p>Hau Nguyen</p>
-            <span>June 24 2022, 13:40pm</span>
+      {posts.map((post) => (
+        <div className={styles.post_container} key={post.id}>
+          <div className={styles.user_profile}>
+            <span>
+              <Image src="/profile-pic.png" alt="profile" layout="fill" />
+            </span>
+            <div>
+              <p>{post.authour}</p>
+              <span>{post.createdAt}</span>
+            </div>
+          </div>
+          <div className={styles.post_text}>
+            <p>{post.title}</p>
+            <p>{post.content}</p>
+            <div className={styles.post_row}>
+              <div className={styles.activity_icon}>
+                <div>
+                  <span>
+                    <Image src="/like-blue.png" alt="" layout="fill" />
+                  </span>
+                  100
+                </div>
+                <div>
+                  <span>
+                    <Image src="/comments.png" alt="" layout="fill" />
+                  </span>
+                  45
+                </div>
+                <div>
+                  <span>
+                    <Image src="/share.png" alt="" layout="fill" />
+                  </span>
+                  33
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className={styles.post_text}>
-          <p>Hom nay troi dep the nhi</p>
-          <p>Tu nhien cam thay yeu doi han ra</p>
-          <div className={styles.post_row}>
-            {/* <div className={styles.activity_icon}>
-              <div>
-                <span>
-                  <Image src="/like-blue.png" alt="" layout='fill' />
-                </span>
-                100
-              </div>
-              <div>
-                <span>
-                  <Image src="/comments.png" alt="" layout='fill'/>
-                </span>
-                45
-              </div>
-              <div>
-                <span>
-                  <Image src="/share.png" alt="" layout='fill'/>
-                </span>
-                33
-              </div>
-            </div> */}
-          </div>
-        </div>
-      </div>
-
-      <div className="container">
-        <ul>
-          {posts.map((post) => (
-            <li key={post.id}>
-              <div>
-                <h1>Title :{post.title}</h1>
-                <h5>Authour: {post.authour} </h5>
-                <p>{post.content}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
+      ))}
+    </div>
   )
 }
 

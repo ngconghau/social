@@ -14,9 +14,9 @@
     position: relative;
     width: 100%;
     display: grid;
-    grid: auto / auto auto;
+    /* grid: auto / auto auto;
     grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
-    grid-gap: 30px;
+    grid-gap: 30px; */
 }
 
 .card .row .col {
@@ -72,6 +72,21 @@
     background: transparent;
     text-transform: uppercase;
   
+    line-height: 40px;
+    font-size: 24px;
+    font-weight: 700;
+    border-radius: 45px;
+    transition: all 0.4s;
+}
+.card .row input[type="button"] {
+    padding: 10px;
+    height: 100%;
+    width: 50%;
+    cursor: pointer;
+    outline: none;
+    background: transparent;
+    text-transform: uppercase;
+
     line-height: 40px;
     font-size: 24px;
     font-weight: 700;

@@ -17,7 +17,7 @@
   background: #3a2b58;
 }
 
-/* .container nav {
+.container nav {
   position: sticky;
   display: flex;
   align-items: center;
@@ -29,8 +29,9 @@
 }
 
 .logo {
+  position: relative;
   width: 160px;
-  height: 100px;
+  height: 41px;
   margin-right: 45px;
 }
 .nav_left,
@@ -38,22 +39,25 @@
   display: flex;
   align-items: center;
 }
-
+.nav_right a {
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: bold ;
+}
 .nav_left ul li {
   display: inline;
 }
 
-.nav_left ul li img {
-  width: 28px;
-  margin: 0 15px;
-}
 .nav_user_icon {
-  margin-left: 30px;
-}
-.nav_user_icon img {
+  position: relative;
+  height: 40px;
   width: 40px;
-  border-radius: 50%;
+  margin-left: 30px;
   cursor: pointer;
+}
+
+.nav_user_icon a span{
+  border-radius: 50%;
 }
 
 .search_box {
@@ -64,8 +68,12 @@
   align-items: center;
   padding: 0 15px;
 }
-.search_box img {
+
+.search_box span {
+  position: relative;
   width: 18px;
+  height: 18px;
+  cursor: pointer;
 }
 
 .search_box input {
@@ -75,7 +83,8 @@
   outline: none;
   border: 0;
 }
-.settings_menu {
+
+ /*.settings_menu {
   position: absolute;
   width: 90%;
   max-width: 350px;
@@ -105,16 +114,17 @@
   margin: 15px 0;
 }
 .settings_links .settings_icon {
+  position: relative;
   width: 40px;
+  height: 40px;
   margin-right: 10px;
   border-radius: 50%;
 }
-.settings_links a {
+.settings_links div {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: space-between;
-  text-decoration: none;
   color: #626262;
 }
 .user_profile a {
@@ -124,4 +134,5 @@
 }
 .settings_menu_inner {
   padding: 20px;
-} */
+}
+*/
