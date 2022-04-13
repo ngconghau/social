@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { database, serverTimestamp } from '../firebase'
 import styles from '../../styles/Post.module.css'
 import Image from 'next/image'
+import Post from '../../components/posts/Post'
 
-const Post = () => {
+const PostPage = () => {
   const [posts, setPosts] = useState([])
   const [userPosts, setUserPosts] = useState([])
   const [user, setUser] = useState()
@@ -84,10 +85,12 @@ const Post = () => {
           authour: users.name,
           title: post.data.title,
           content: post.data.content,
-           createdAt: post.data.createdAt.toDate().toDateString()
+          createdAt: post.data.createdAt
+            .toDate()
+            .toDateString()
+            .concat(', ', post.data.createdAt.toDate().toLocaleTimeString()),
         })
       })
-
       setPosts(userPostList)
     })
 
@@ -164,46 +167,47 @@ const Post = () => {
       </div>
 
       {posts.map((post) => (
-        <div className={styles.post_container} key={post.id}>
-          <div className={styles.user_profile}>
-            <span>
-              <Image src="/profile-pic.png" alt="profile" layout="fill" />
-            </span>
-            <div>
-              <p>{post.authour}</p>
-              <span>{post.createdAt}</span>
-            </div>
-          </div>
-          <div className={styles.post_text}>
-            <p>{post.title}</p>
-            <p>{post.content}</p>
-            <div className={styles.post_row}>
-              <div className={styles.activity_icon}>
-                <div>
-                  <span>
-                    <Image src="/like-blue.png" alt="" layout="fill" />
-                  </span>
-                  100
-                </div>
-                <div>
-                  <span>
-                    <Image src="/comments.png" alt="" layout="fill" />
-                  </span>
-                  45
-                </div>
-                <div>
-                  <span>
-                    <Image src="/share.png" alt="" layout="fill" />
-                  </span>
-                  33
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        // <div className={styles.post_container} key={post.id}>
+        //   <div className={styles.user_profile}>
+        //     <span>
+        //       <Image src="/profile-pic.png" alt="profile" layout="fill" />
+        //     </span>
+        //     <div>
+        //       <p>{post.authour}</p>
+        //       <span>{post.createdAt}</span>
+        //     </div>
+        //   </div>
+        //   <div className={styles.post_text}>
+        //     <p>{post.title}</p>
+        //     <p>{post.content}</p>
+        //     <div className={styles.post_row}>
+        //       <div className={styles.activity_icon}>
+        //         <div>
+        //           <span>
+        //             <Image src="/like-blue.png" alt="" layout="fill" />
+        //           </span>
+        //           100
+        //         </div>
+        //         <div>
+        //           <span>
+        //             <Image src="/comments.png" alt="" layout="fill" />
+        //           </span>
+        //           45
+        //         </div>
+        //         <div>
+        //           <span>
+        //             <Image src="/share.png" alt="" layout="fill" />
+        //           </span>
+        //           33
+        //         </div>
+        //       </div>
+        //     </div>
+        //   </div>
+        // </div>
+        <Post key={post.id} post={post}/>
       ))}
     </div>
   )
 }
 
-export default Post
+export default PostPage
