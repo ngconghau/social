@@ -117,19 +117,7 @@
 }
 
 .post_row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  background: #fff;
 }
-.activity_icon div {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 30px;
-}
-.activity_icon div span {
-  position: relative;
-  width: 18px;
-  height: 18px;
-  margin-right: 10px;
-  cursor: pointer;
-}
+
+

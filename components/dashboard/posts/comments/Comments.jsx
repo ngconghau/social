@@ -1,12 +1,46 @@
+import { delBasePath } from 'next/dist/shared/lib/router/router'
 import React, { useState, useEffect } from 'react'
-import { database, serverTimestamp } from '../../pages/firebase'
+import { database, serverTimestamp } from '../../../../pages/firebase'
+import CommentForm from './CommentForm'
 
-const Comments = ({postId}) => {
+const Comments = ({ postId, userCommentId }) => {
   const [postsComment, setPostComments] = useState([])
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   const getComments = database
+  //     .collection(`comments/${postId}/postComments`)
+  //     .onSnapshot((querysnapshot) => {
+  //       let postCmt = []
+  //       querysnapshot.forEach((doc) => {
+  //         //console.log(doc.id)
+  //       })
+  //       // querysnapshot.forEach((doc) => {
+  //       //   let comment = {
+  //       //     id: doc.id,
+  //       //     content: doc.data().content,
+  //       //     userRef: doc.data().userRef,
+  //       //   }
+  //       //   if (comment.userRef) {
+  //       //     database
+  //       //       .doc(doc.data().userRef)
+  //       //       .get()
+  //       //       .then((doc) => {
+  //       //         comment.userRef = {
+  //       //           uid: doc.id,
+  //       //           name: doc.data().name,
+  //       //         }
+  //       //       })
+  //       //       .then(() => {
+  //       //         setPostComments(post)
+  //       //       })
+  //       //   }
+  //       // })
+  //     })
+  //   return getComments
+  // }, [postId])
+  const handleClick = () => {
     database
-      .collection(`comments/${postId}/postComments`)
+      .collectionGroup('postComments')
       .get()
       .then((querysnapshot) => {
         let post = []
@@ -32,38 +66,6 @@ const Comments = ({postId}) => {
               })
           }
         })
-      })
-    return
-  }, [postId])
-  const handleClick = () => {
-    database
-      .collectionGroup('postComments')
-      .get()
-      .then((querysnapshot) => {
-        let post = []
-        querysnapshot.forEach((doc) => {
-          let comment = {
-            id: doc.id,
-            content: doc.data().content,
-            userRef: doc.data().userRef,
-          }
-          if (comment.userRef) {
-            database
-              .doc(doc.data().userRef)
-              .get()
-              .then((doc) => {
-                comment.userRef = {
-                  uid: doc.id,
-                  name: doc.data().name,
-                }
-                post.push(comment)
-              })
-              .then(()=>{
-                setPostComments(post)
-              })
-          }
-        })
-      
       })
   }
   // useEffect(() => {
@@ -117,14 +119,60 @@ const Comments = ({postId}) => {
   //     })
   //   })
   // },[])
+
+  const handleCreateComment = (text) => {
+    console.log(postId)
+    database
+      .collection('comments')
+      .doc(postId)
+      .collection('postComments')
+      .add({
+        content: text,
+        createdAt: serverTimestamp(),
+        userRef: database.doc(`/users/${userCommentId.id}`),
+      })
+  }
+
+  const lumCMT = (e) => {
+    e.preventDefault()
+    let users = []
+   
+
+    // database
+    //   .collection('users')
+    //   .get()
+    //   .then((result) => {
+    //     result.forEach((doc) => {
+    //       users.push({ uid: doc.id, name: doc.data().name })
+    //     })
+    //   })
+    database
+      .collection(`comments/${postId}/postComments`)
+      .onSnapshot((querySnapshot) => { 
+        let comments = []
+        querySnapshot.forEach((doc) => {
+          comments.push({ id: doc.id, data: doc.data() })
+        })
+        
+       
+      })
+  }
+
   return (
     <div>
+      <div>
+        <CommentForm handleCreateComment={handleCreateComment} />
+      </div>
+      <button onClick={lumCMT}>lụm CMT</button>
       <ul>
-        {postsComment.map((comment)=>
-          (
-            <li key={comment.id}>{comment.content}</li>
-          )
-        )}
+        {postsComment.map((comment) => (
+          <li key={comment.id}>
+            <div>
+              <h4>{comment.userRef.name}</h4>
+              <p>{comment.content}</p>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   )
