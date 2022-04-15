@@ -16,5 +16,4 @@ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig)
 
 const database = firebase.firestore()
 const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp
-
 export { database, serverTimestamp }

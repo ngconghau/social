@@ -7,12 +7,13 @@ import Image from 'next/image'
 const Nav = ({ handleLogOut }) => {
   const [user, setUser] = useState()
   useEffect(() => {
-    database
+    const unsubcribe =database
       .collection('users')
       .doc(localStorage.getItem('data'))
       .onSnapshot((doc) => {
         setUser(doc.data().name)
       })
+      return unsubcribe
   }, [])
 
   return (
