@@ -44,7 +44,7 @@ const PostPage = () => {
           setUserPosts(userPosts)
         }
       })
-    return () => getAllUserPosts
+    return getAllUserPosts
   }, [])
 
   // run when userPosts change
@@ -95,7 +95,7 @@ const PostPage = () => {
 
     return getAllUsers
   }, [userPosts])
-  
+
   const handleCreatePost = (text) => {
     database
       .collection('posts')
@@ -109,7 +109,7 @@ const PostPage = () => {
       })
   }
   return (
-    <div className={styles.container}>
+    <div className={styles.wrapper_container}>
       <PostForm user={user} handleCreatePost={handleCreatePost} />
       {posts.map((post) => (
         <Post key={post.id} post={post} userCurrentId={user} />

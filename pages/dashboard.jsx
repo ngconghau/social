@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import Nav from './nav'
-
+import styles from '../styles/Post.module.css'
 import PostPage from '../components/dashboard/posts/Posts'
-const Dashboard = ({handleLogOut}) => {
+import Follows from '../components/dashboard/follows/Follows'
+const Dashboard = ({ handleLogOut }) => {
   return (
     <div>
       <Nav handleLogOut={handleLogOut} />
-      <PostPage />
+      <div className={styles.container}>
+        <Follows />
+        <PostPage />
+      </div>
     </div>
   )
 }

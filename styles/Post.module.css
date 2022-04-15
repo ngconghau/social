@@ -1,4 +1,7 @@
 .container{
+  display: flex;
+}
+.wrapper_container{
   width: 50%;
   margin: 0 auto;
 }

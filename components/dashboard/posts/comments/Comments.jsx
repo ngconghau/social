@@ -8,7 +8,7 @@ const Comments = ({ postId, userCommentId }) => {
 
   useEffect(() => {
     const getComments = database
-      .collection(`comments/${postId}/postComments`)
+      .collection(`comments/${postId}/postComments`).orderBy('createdAt', 'desc')
       .onSnapshot(async (querySnapshot) => {
         let comments = []
         querySnapshot.forEach((doc) => {

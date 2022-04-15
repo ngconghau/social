@@ -29,10 +29,10 @@ const Nav = ({ handleLogOut }) => {
           </div>
           <div className={styles.nav_right}>
             <div className={styles.search_box}>
+              <input type="text" placeholder="Search" />
               <span>
                 <Image src="/search.png" alt="search" layout="fill" />
               </span>
-              <input type="text" placeholder="Search" />
             </div>
             <div className={styles.nav_user_icon}>
               <Link href="./user">
