@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState ,useContext } from 'react'
+import { AuthContext } from '../store/AuthContext'
 import styles from '../styles/Login.module.css'
 
-export default function Login(props) {
-  const { values, handleOnChange, handleSignIn, handleSignUp, clearState } =
-    props
+export default function Login() {
+  const { user, values, handleOnChange, handleSignIn, handleSignUp, clearState } = useContext(AuthContext)
+
+  
   return (
     <div className={styles.login}>
       <div className={styles.loginContainer}>

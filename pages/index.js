@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect , useContext } from 'react'
+import { AuthContext } from '../store/AuthContext'
 import Head from 'next/head'
 import Dashboard from './dashboard'
 import useForm from './api/useLogin'
@@ -15,6 +16,7 @@ export default function Home() {
     clearState,
   } = useForm()
 
+  
   return (
     <div>
       <Head>
@@ -27,13 +29,7 @@ export default function Home() {
         {isLogin ? (
           <Dashboard handleLogOut={handleLogOut} />
         ) : (
-          <Login
-            values={values}
-            handleOnChange={handleOnChange}
-            handleSignIn={handleSignIn}
-            handleSignUp={handleSignUp}
-            clearState={clearState}
-          />
+          <Login/>
         )}
       </main>
       <footer></footer>
